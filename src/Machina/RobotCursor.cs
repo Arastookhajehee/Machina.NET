@@ -63,6 +63,10 @@ namespace Machina
         public Dictionary<RobotPartType, double> partTemperature;
         public double extrudedLength, prevExtrudedLength;  // the length of filament that has been extruded, i.e. the "E" parameter
 
+        // Gripper
+        public double gripperValue;
+        public double heldObjectWeight;
+
         /// <summary>
         /// Last Action that was applied to this cursor
         /// </summary>
@@ -474,6 +478,7 @@ namespace Machina
             { typeof (ActionExternalAxis),              (act, robCur) => robCur.ApplyAction((ActionExternalAxis) act) },
             { typeof (ActionCustomCode),                (act, robCur) => robCur.ApplyAction((ActionCustomCode) act) },
             { typeof (ActionArmAngle),                  (act, robCur) => robCur.ApplyAction((ActionArmAngle) act) },
+            { typeof (ActionRG6Gripper),                  (act, robCur) => robCur.ApplyAction((ActionRG6Gripper) act) },
             { typeof (ActionArcMotion),                 (act, robCur) => robCur.ApplyAction((ActionArcMotion) act) }
         };
 
@@ -520,6 +525,27 @@ namespace Machina
             if (_logRelativeActions && action.relative)
             {
                 logger.Verbose("Acceleration set to " + this.acceleration);
+            }
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionRG6Gripper action)
+        {
+            if (action.relative)
+                this.gripperValue += action.gripperValue;
+            else
+                this.gripperValue = gripperValue;
+
+            if (this.gripperValue < 0) this.gripperValue = 0;
+            if (this.gripperValue > 150) this.gripperValue = 150;
+
+            this.heldObjectWeight = action.heldObjectWeight;
+
+
+            if (_logRelativeActions && action.relative)
+            {
+                logger.Verbose("Gripper finger distance set to " + this.gripperValue + " holding " + this.heldObjectWeight + "kilograms");
             }
 
             return true;

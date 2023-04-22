@@ -50,6 +50,12 @@ namespace Machina.Drivers.Communication.Protocols
         // Similarly here, a received value in "puffed" m/s^2 will be internally translated to rad/s^2
         internal const int INST_ALL_ACC = 16;                // [ID, CODE, ACC] (in (int) M/S^2 * FACTOR_M)
         internal const int INST_MOVEP = 17;                  // [ID, CODE, X, Y, Z, RX, RY, RZ] (in (int) M * FACTOR_M, RAD * FACTOR_RAD)
+        
+        // Gripper stuff
+        internal const int INST_ONROBOT_RG6 = 27;                  
+        internal const int INST_ONROBOT_RG6_INPLACE = 0;                  
+        internal const int INST_ONROBOT_RG6_MOVING = 1;                  
+
 
         internal const int RES_FULL_POSE = -54;              // ">54 X Y Z RX RY RZ J1 J2 J3 J4 J5 J6;" Sends all pose and joint info
         internal const int RES_END = -2147483648;            // Used to denote the end of sending messages
@@ -100,6 +106,19 @@ namespace Machina.Drivers.Communication.Protocols
 
             switch (_action.Type)
             {
+
+                case ActionType.OnrobotRG6:
+                    ActionRG6Gripper rbg = _action as ActionRG6Gripper;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_RG6,
+                        (int) rbg.gripperValue,
+                        (int) rbg.heldObjectWeight,
+                        rbg.gripperRunStop == GripperRunStop.Inplace ? INST_ONROBOT_RG6_INPLACE : INST_ONROBOT_RG6_MOVING
+                    };
+                    break;
+
                 case ActionType.Translation:
                 case ActionType.Rotation:
                 case ActionType.Transformation:  

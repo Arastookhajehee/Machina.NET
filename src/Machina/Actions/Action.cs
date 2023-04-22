@@ -41,7 +41,8 @@ namespace Machina
         ExternalAxis,
         CustomCode,
         ArmAngle,
-        ArcMotion
+        ArcMotion,
+        OnrobotRG6
     }
 
     

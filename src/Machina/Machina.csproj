@@ -94,6 +94,7 @@
     <Compile Include="Actions\ActionMotionMode.cs" />
     <Compile Include="Actions\ActionPrecision.cs" />
     <Compile Include="Actions\ActionPushPop.cs" />
+    <Compile Include="Actions\ActionRG6Gripper.cs" />
     <Compile Include="Actions\ActionRotation.cs" />
     <Compile Include="Actions\ActionSpeed.cs" />
     <Compile Include="Actions\ActionTemperature.cs" />
