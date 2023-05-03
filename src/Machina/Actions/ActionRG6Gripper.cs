@@ -20,7 +20,7 @@ namespace Machina
     /// <summary>
     /// An Action to control the Onrobot RG6 Gripper.  @Developed by Arastoo Khajehee 
     /// </summary>
-    internal class ActionRG6Gripper : Action
+    public class ActionRG6Gripper : Action
     {
         public GripperType gripperType;
         public double gripperValue;
