@@ -1790,14 +1790,14 @@ namespace Machina
         //  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
         //                                                                  
         /// <summary>
-        /// A <Name, MethodInfo> dict of reflected methods from the main Robot class, 
+        /// A dict of reflected methods from the main Robot class, 
         /// that can be invoked from parsed strings from primitive values. 
         /// Such methods are flagged with attributes, and loaded at runtime. 
         /// </summary>
         internal static Dictionary<string, MethodInfo> _reflectedAPI;
 
         /// <summary>
-        /// A <Name, MethodInfo> dict of CASE-INSENSITIVE reflected methods from the main Robot class, 
+        /// A dict of CASE-INSENSITIVE reflected methods from the main Robot class, 
         /// that can be invoked from parsed strings from primitive values. 
         /// Such methods are flagged with attributes, and loaded at runtime. 
         /// </summary>
