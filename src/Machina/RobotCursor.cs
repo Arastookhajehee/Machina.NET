@@ -545,7 +545,7 @@ namespace Machina
 
             if (_logRelativeActions && action.relative)
             {
-                logger.Verbose("Gripper finger distance set to " + this.gripperValue + " holding " + this.heldObjectWeight + "kilograms");
+                logger.Verbose("Gripper finger distance set to " + this.gripperValue + " holding " + this.heldObjectWeight + " kilograms");
             }
 
             return true;

@@ -391,7 +391,7 @@ namespace Machina
         }
 
         [ParseableFromString]
-        public bool GripperTo(double gripperValue, double weight, string gripperRunStop, bool relative)
+        public bool GripperTo(double gripperValue, double weight, string gripperRunStop)
         {
 
 
