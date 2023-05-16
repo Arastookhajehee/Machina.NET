@@ -64,7 +64,7 @@ namespace Machina
         public double extrudedLength, prevExtrudedLength;  // the length of filament that has been extruded, i.e. the "E" parameter
 
         // Gripper
-        public double gripperValue;
+        public double gripperValue = 75.0;
         public double heldObjectWeight;
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace Machina
             if (action.relative)
                 this.gripperValue += action.gripperValue;
             else
-                this.gripperValue = gripperValue;
+                this.gripperValue = action.gripperValue;
 
             if (this.gripperValue < 0) this.gripperValue = 0;
             if (this.gripperValue > 150) this.gripperValue = 150;
