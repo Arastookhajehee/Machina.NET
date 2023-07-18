@@ -376,7 +376,7 @@ namespace Machina
                 grs = (GripperRunStop)Enum.Parse(typeof(GripperRunStop), gripperRunStop, true);
                 if (Enum.IsDefined(typeof(GripperRunStop), grs))
                 {
-                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, true);
+                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, true,new Rhino.Geometry.Mesh());
                 }
             }
             catch
@@ -401,7 +401,7 @@ namespace Machina
                 grs = (GripperRunStop)Enum.Parse(typeof(GripperRunStop), gripperRunStop, true);
                 if (Enum.IsDefined(typeof(GripperRunStop), grs))
                 {
-                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, false);
+                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, false,new Rhino.Geometry.Mesh());
                 }
             }
             catch

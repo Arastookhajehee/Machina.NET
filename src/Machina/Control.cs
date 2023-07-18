@@ -11,6 +11,7 @@ using Machina.Controllers;
 using Machina.Drivers;
 using Machina.Types.Geometry;
 using Machina.Types.Data;
+using Rhino.Geometry;
 
 namespace Machina
 {
@@ -940,7 +941,7 @@ namespace Machina
         /// <param name="relative"></param>
         /// <param name="positionOnly"></param>
         /// <returns></returns>
-        public bool IssueArcMotionRequest(Plane through, Plane end, bool relative, bool positionOnly) =>
+        public bool IssueArcMotionRequest(Machina.Types.Geometry.Plane through, Machina.Types.Geometry.Plane end, bool relative, bool positionOnly) =>
             IssueApplyActionRequest(new ActionArcMotion(through, end, relative, positionOnly));
 
         /// <summary>
@@ -1028,8 +1029,8 @@ namespace Machina
                 IssueApplyActionRequest(new ActionIOAnalog(pinId, value, toolPin));
 
 
-        public bool IssueGripperRequest(GripperType gripperType, double gripperValue, double heldObjectWeight, GripperRunStop gripperRunStop, bool relative) =>
-                IssueApplyActionRequest(new ActionRG6Gripper(GripperType.Analouge, gripperValue, heldObjectWeight, gripperRunStop, relative));
+        public bool IssueGripperRequest(GripperType gripperType, double gripperValue, double heldObjectWeight, GripperRunStop gripperRunStop, bool relative,Mesh mesh) =>
+                IssueApplyActionRequest(new ActionRG6Gripper(GripperType.Analouge, gripperValue, heldObjectWeight, gripperRunStop, relative,new Rhino.Geometry.Mesh()));
         // for now I'm hard coding the gripper type to analouge since it's the only one we have
 
         /// <summary>
@@ -1164,7 +1165,7 @@ namespace Machina
         /// <param name="rotation"></param>
         /// <param name="joints"></param>
         /// <returns></returns>
-        internal bool InitializeRobotCursors(Point position = null, Rotation rotation = null, Joints joints = null, ExternalAxes extAx = null,
+        internal bool InitializeRobotCursors(Machina.Types.Geometry.Point position = null, Rotation rotation = null, Joints joints = null, ExternalAxes extAx = null,
             double speed = Control.DEFAULT_SPEED, double acc = Control.DEFAULT_ACCELERATION, double precision = Control.DEFAULT_PRECISION,
             MotionType mType = Control.DEFAULT_MOTION_TYPE, ReferenceCS refCS = Control.DEFAULT_REFCS)
 

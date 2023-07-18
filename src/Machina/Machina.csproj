@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Machina</RootNamespace>
     <AssemblyName>Machina</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -58,6 +58,10 @@
   <ItemGroup>
     <Reference Include="ABB.Robotics.Controllers.PC">
       <HintPath>assemblies\ABB.Robotics.Controllers.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="RobotStudio.Services.RobApi.Desktop">
       <HintPath>assemblies\RobotStudio.Services.RobApi.Desktop.dll</HintPath>

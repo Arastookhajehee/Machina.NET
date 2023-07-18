@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rhino.Geometry;
 
 
 namespace Machina
@@ -27,16 +27,18 @@ namespace Machina
         public double heldObjectWeight;
         public GripperRunStop gripperRunStop;
         public bool relative;
+        public Mesh GripperMesh;
 
         public override ActionType Type => ActionType.OnrobotRG6;
 
-        public ActionRG6Gripper(GripperType gripperType, double gripperValue, double heldObjectWeight, GripperRunStop gripperRunStop, bool relative) : base()
+        public ActionRG6Gripper(GripperType gripperType, double gripperValue, double heldObjectWeight, GripperRunStop gripperRunStop, bool relative, Mesh mesh) : base()
         {
             this.gripperType = gripperType;
             this.gripperValue = gripperValue;
             this.heldObjectWeight = heldObjectWeight;
             this.gripperRunStop = gripperRunStop;
             this.relative = relative;
+            this.GripperMesh = mesh;
         }
 
         public override string ToString()
