@@ -217,8 +217,6 @@ def machina_ur_driver():
         RGCat_Seg_01 = str_cat(Gripper_Action_Concat01,Gripper_Action_Concat02)
         RGCat = str_cat(RGCat_Seg_01,"^")
 
-        #send_string(RGCat)
-
         socket_send_string(RGCat)
 
       elif action_code == INST_ALL_SPEED:
