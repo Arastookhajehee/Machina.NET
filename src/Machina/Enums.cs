@@ -205,36 +205,4 @@ namespace Machina
         Joint
     }
 
-    //@Developed by Arastoo
-    /// <summary>
-    /// Is the Gripper just open/close has vaiable distance
-    /// </summary>
-    public enum GripperType
-    {
-        /// <summary>
-        /// Gripper Type that has only open/close states
-        /// </summary>
-        Digital = 0,
-        /// <summary>
-        /// Gripper type that can variable gripping distance
-        /// </summary>
-        Analouge = 1
-    }
-
-    //@Developed by Arastoo
-    /// <summary>
-    /// Whether the gripper stops the robot until it's finished opening/closing
-    /// </summary>
-    public enum GripperRunStop
-    {
-        /// <summary>
-        /// robot stops until gripper is opened/closed
-        /// </summary>
-        Inplace = 0,
-        /// <summary>
-        /// Robot moves while the gripper opens/closes
-        /// </summary>
-        Moving = 1
-    }
-
 }

@@ -113,9 +113,8 @@ namespace Machina.Drivers.Communication.Protocols
                     {
                         _action.Id,
                         INST_ONROBOT_RG6,
-                        (int) cursor.gripperValue,
-                        (int) cursor.heldObjectWeight,
-                        rbg.gripperRunStop == GripperRunStop.Inplace ? INST_ONROBOT_RG6_INPLACE : INST_ONROBOT_RG6_MOVING
+                        (int) cursor.gripperDistance,
+                        (int) cursor.gripForce,
                     };
                     break;
 

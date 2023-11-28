@@ -1028,8 +1028,8 @@ namespace Machina
                 IssueApplyActionRequest(new ActionIOAnalog(pinId, value, toolPin));
 
 
-        public bool IssueGripperRequest(GripperType gripperType, double gripperValue, double heldObjectWeight, GripperRunStop gripperRunStop, bool relative) =>
-                IssueApplyActionRequest(new ActionRG6Gripper(GripperType.Analouge, gripperValue, heldObjectWeight, gripperRunStop, relative));
+        public bool IssueGripperRequest(int gripperDistance, int gripForce) =>
+                IssueApplyActionRequest(new ActionRG6Gripper(gripperDistance, gripForce));
         // for now I'm hard coding the gripper type to analouge since it's the only one we have
 
         /// <summary>

@@ -364,55 +364,12 @@ namespace Machina
         //  ╚══════╝╚══════╝   ╚═╝      ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝
 
 
-
         [ParseableFromString]
-        public bool Gripper(double gripperValue, double weight, string gripperRunStop)
+        public bool GripperTo(int gripperDistance, int gripForce)
         {
 
-
-            GripperRunStop grs;
-            try
-            {
-                grs = (GripperRunStop)Enum.Parse(typeof(GripperRunStop), gripperRunStop, true);
-                if (Enum.IsDefined(typeof(GripperRunStop), grs))
-                {
-                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, true);
-                }
-            }
-            catch
-            {
-                logger.Error($"{gripperRunStop} is not a valid run type for the gripper try: 'inplace' or 'moving'");
-                foreach (string str in Enum.GetNames(typeof(GripperRunStop)))
-                {
-                    logger.Error(str);
-                }
-            }
-            return false;
-        }
-
-        [ParseableFromString]
-        public bool GripperTo(double gripperValue, double weight, string gripperRunStop)
-        {
-
-
-            GripperRunStop grs;
-            try
-            {
-                grs = (GripperRunStop)Enum.Parse(typeof(GripperRunStop), gripperRunStop, true);
-                if (Enum.IsDefined(typeof(GripperRunStop), grs))
-                {
-                    return c.IssueGripperRequest(GripperType.Analouge, gripperValue, weight, grs, false);
-                }
-            }
-            catch
-            {
-                logger.Error($"{gripperRunStop} is not a valid run type for the gripper try: 'inplace' or 'moving'");
-                foreach (string str in Enum.GetNames(typeof(GripperRunStop)))
-                {
-                    logger.Error(str);
-                }
-            }
-            return false;
+           return c.IssueGripperRequest(gripperDistance, gripForce);
+              
         }
 
 

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -10,6 +12,9 @@ using System.Threading.Tasks;
 using Machina.Drivers.Communication;
 using Machina.Drivers.Communication.Protocols;
 using Machina.Types.Geometry;
+
+using Newtonsoft.Json;
+
 
 namespace Machina.Drivers.Communication
 {
@@ -267,6 +272,7 @@ namespace Machina.Drivers.Communication
                 //}
 
                 Thread.Sleep(30);
+                string wait = "";
             }
         }
 
@@ -362,6 +368,15 @@ namespace Machina.Drivers.Communication
                 {
                     while (_isServerListeningRunning && (receivedCount = _robotNetworkStream.Read(_serverListeningBytes, 0, _serverListeningBytes.Length)) != 0)
                     {
+                        string result = System.Text.Encoding.ASCII.GetString(_serverListeningBytes);
+
+                        if (result.Contains("RG6")) 
+                        {
+                            ParseRG6Call(result);
+                            continue;
+                        };
+
+
                         _serverListeningInts = Utilities.Conversion.ByteArrayToInt32Array(_serverListeningBytes, receivedCount, false);
 
                         logger.Debug("Received (id): [" + string.Join(",", _serverListeningInts) + "]");
@@ -674,6 +689,51 @@ namespace Machina.Drivers.Communication
             logger.Debug(ids);
             logger.Debug("");
         }
+
+        private static async void ParseRG6Call(string response) 
+        {
+             
+            string[] parts = response.Split('^');
+
+            int distance = Convert.ToInt32(parts[1]);
+            int force = Convert.ToInt32(parts[2]);
+
+            distance = distance < 0 ? 0 : distance;
+            distance = distance > 150 ? 150 : distance;
+
+            // there is a bit of offset in the RG6 gripper for some reason.
+            distance += 5;
+
+            force = force < 25 ? 25 : force;
+            force = force > 120 ? 120 : force;
+
+            string RG6_API_Request = string.Format("http://192.168.1.1/api/dc/rgxp2/set_width/0/{0}/{1}", distance,force);
+
+            await GetRequest(RG6_API_Request);
+        }
+
+
+        static async Task GetRequest(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    // Output the response content.
+                    Console.WriteLine(responseBody);
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message: {0}", e.Message);
+                }
+            }
+        }
+
 
     }
 }

@@ -59,6 +59,9 @@
     <Reference Include="ABB.Robotics.Controllers.PC">
       <HintPath>assemblies\ABB.Robotics.Controllers.PC.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Machina-Bridge\src\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RobotStudio.Services.RobApi.Desktop">
       <HintPath>assemblies\RobotStudio.Services.RobApi.Desktop.dll</HintPath>
     </Reference>
@@ -190,7 +193,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\DriverModules\ABB\machina_abb_empty.pgf" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>REM JL: for the time being, only copy ddlls manually to avoid breaking the dependent projects

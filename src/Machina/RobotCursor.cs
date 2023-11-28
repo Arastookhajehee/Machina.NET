@@ -64,8 +64,8 @@ namespace Machina
         public double extrudedLength, prevExtrudedLength;  // the length of filament that has been extruded, i.e. the "E" parameter
 
         // Gripper
-        public double gripperValue = 75.0;
-        public double heldObjectWeight;
+        public double gripperDistance = 75.0;
+        public double gripForce = 80.0;
 
         /// <summary>
         /// Last Action that was applied to this cursor
@@ -532,21 +532,15 @@ namespace Machina
 
         public bool ApplyAction(ActionRG6Gripper action)
         {
-            if (action.relative)
-                this.gripperValue += action.gripperValue;
-            else
-                this.gripperValue = action.gripperValue;
+            
+            this.gripperDistance = action.gripperDistance;
 
-            if (this.gripperValue < 0) this.gripperValue = 0;
-            if (this.gripperValue > 150) this.gripperValue = 150;
+            if (this.gripperDistance < 0) this.gripperDistance = 0;
+            if (this.gripperDistance > 150) this.gripperDistance = 150;
 
-            this.heldObjectWeight = action.heldObjectWeight;
-
-
-            if (_logRelativeActions && action.relative)
-            {
-                logger.Verbose("Gripper finger distance set to " + this.gripperValue + " holding " + this.heldObjectWeight + " kilograms");
-            }
+            this.gripForce = action.gripStrength;
+            if (this.gripForce < 25) this.gripForce = 25;
+            if (this.gripForce > 120) this.gripForce = 120;
 
             return true;
         }
