@@ -67,6 +67,9 @@ namespace Machina
         public double gripperDistance = 75.0;
         public double gripForce = 80.0;
 
+        // ScrewDriver
+        public double screwDriverShank = 20;
+
         /// <summary>
         /// Last Action that was applied to this cursor
         /// </summary>
@@ -479,6 +482,7 @@ namespace Machina
             { typeof (ActionCustomCode),                (act, robCur) => robCur.ApplyAction((ActionCustomCode) act) },
             { typeof (ActionArmAngle),                  (act, robCur) => robCur.ApplyAction((ActionArmAngle) act) },
             { typeof (ActionRG6Gripper),                  (act, robCur) => robCur.ApplyAction((ActionRG6Gripper) act) },
+            { typeof (ActionOnRobotScrewDriverShank),     (act, robCur) => robCur.ApplyAction((ActionOnRobotScrewDriverShank) act) },
             { typeof (ActionArcMotion),                 (act, robCur) => robCur.ApplyAction((ActionArcMotion) act) }
         };
 
@@ -541,6 +545,17 @@ namespace Machina
             this.gripForce = action.gripStrength;
             if (this.gripForce < 25) this.gripForce = 25;
             if (this.gripForce > 120) this.gripForce = 120;
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotScrewDriverShank action)
+        {
+
+            this.screwDriverShank = action.shankPosition;
+
+            if (this.screwDriverShank < 0) this.screwDriverShank = 0;
+            if (this.screwDriverShank > 55) this.screwDriverShank = 55;
 
             return true;
         }

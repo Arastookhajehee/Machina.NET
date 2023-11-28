@@ -42,7 +42,8 @@ namespace Machina
         CustomCode,
         ArmAngle,
         ArcMotion,
-        OnrobotRG6
+        OnrobotRG6,
+        OnrobotSDshank
     }
 
     

@@ -374,7 +374,12 @@ namespace Machina.Drivers.Communication
                         {
                             ParseRG6Call(result);
                             continue;
-                        };
+                        }
+                        else if (result.Contains("SDSHANK"))
+                        {
+                            ParseScrewDriverShankCall(result);
+                            continue;
+                        }
 
 
                         _serverListeningInts = Utilities.Conversion.ByteArrayToInt32Array(_serverListeningBytes, receivedCount, false);
@@ -707,10 +712,26 @@ namespace Machina.Drivers.Communication
             force = force < 25 ? 25 : force;
             force = force > 120 ? 120 : force;
 
-            string RG6_API_Request = string.Format("http://192.168.1.1/api/dc/rgxp2/set_width/0/{0}/{1}", distance,force);
+            string API_Request = string.Format("http://192.168.1.1/api/dc/rgxp2/set_width/0/{0}/{1}", distance,force);
 
-            await GetRequest(RG6_API_Request);
+            await GetRequest(API_Request);
         }
+
+        private static async void ParseScrewDriverShankCall(string response)
+        {
+
+            string[] parts = response.Split('^');
+
+            int shankPosition = Convert.ToInt32(parts[1]);
+
+            shankPosition = shankPosition < 0 ? 0 : shankPosition;
+            shankPosition = shankPosition > 55 ? 55 : shankPosition;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/move_shank/0/{0}", shankPosition);
+
+            await GetRequest(API_Request);
+        }
+
 
 
         static async Task GetRequest(string url)

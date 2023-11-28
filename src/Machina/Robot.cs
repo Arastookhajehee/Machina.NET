@@ -365,11 +365,19 @@ namespace Machina
 
 
         [ParseableFromString]
-        public bool GripperTo(int gripperDistance, int gripForce)
+        public bool GripperTo(int gripperDistance, int gripForce, int waitTime)
         {
 
-           return c.IssueGripperRequest(gripperDistance, gripForce);
+           return c.IssueGripperRequest(gripperDistance, gripForce, waitTime);
               
+        }
+
+        [ParseableFromString]
+        public bool SD_ShankTo(int shankPosition, int waitTime)
+        {
+
+            return c.IssueOnRobotScrewDriverRequest(shankPosition, waitTime);
+
         }
 
 

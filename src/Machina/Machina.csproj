@@ -99,6 +99,7 @@
     <Compile Include="Actions\ActionPushPop.cs" />
     <Compile Include="Actions\ActionRG6Gripper.cs" />
     <Compile Include="Actions\ActionRotation.cs" />
+    <Compile Include="Actions\ActionOnRobotScrewDriverShank.cs" />
     <Compile Include="Actions\ActionSpeed.cs" />
     <Compile Include="Actions\ActionTemperature.cs" />
     <Compile Include="Actions\ActionTransformation.cs" />

@@ -1028,9 +1028,11 @@ namespace Machina
                 IssueApplyActionRequest(new ActionIOAnalog(pinId, value, toolPin));
 
 
-        public bool IssueGripperRequest(int gripperDistance, int gripForce) =>
-                IssueApplyActionRequest(new ActionRG6Gripper(gripperDistance, gripForce));
-        // for now I'm hard coding the gripper type to analouge since it's the only one we have
+        public bool IssueGripperRequest(int gripperDistance, int gripForce, int waitTime) =>
+                IssueApplyActionRequest(new ActionRG6Gripper(gripperDistance, gripForce, waitTime));
+
+        public bool IssueOnRobotScrewDriverRequest(int shankPosition, int waitTime) =>
+                IssueApplyActionRequest(new ActionOnRobotScrewDriverShank(shankPosition, waitTime));
 
         /// <summary>
         /// Issue a request to add common initialization/termination procedures on the device, 

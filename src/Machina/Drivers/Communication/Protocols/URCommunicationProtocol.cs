@@ -53,9 +53,9 @@ namespace Machina.Drivers.Communication.Protocols
         
         // Gripper stuff
         internal const int INST_ONROBOT_RG6 = 27;                  
-        internal const int INST_ONROBOT_RG6_INPLACE = 0;                  
-        internal const int INST_ONROBOT_RG6_MOVING = 1;                  
 
+        // ScrewDriver stuff
+        internal const int INST_ONROBOT_SD_SHANK = 28;
 
         internal const int RES_FULL_POSE = -54;              // ">54 X Y Z RX RY RZ J1 J2 J3 J4 J5 J6;" Sends all pose and joint info
         internal const int RES_END = -2147483648;            // Used to denote the end of sending messages
@@ -115,9 +115,19 @@ namespace Machina.Drivers.Communication.Protocols
                         INST_ONROBOT_RG6,
                         (int) cursor.gripperDistance,
                         (int) cursor.gripForce,
+                        (int) rbg.waitTime,
                     };
                     break;
-
+                case ActionType.OnrobotSDshank:
+                    ActionOnRobotScrewDriverShank sdShank = _action as ActionOnRobotScrewDriverShank;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_SD_SHANK,
+                        (int) cursor.screwDriverShank,
+                        (int) sdShank.wait_time
+                    };
+                    break;
                 case ActionType.Translation:
                 case ActionType.Rotation:
                 case ActionType.Transformation:  
