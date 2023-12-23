@@ -56,6 +56,13 @@ namespace Machina.Drivers.Communication.Protocols
 
         // ScrewDriver stuff
         internal const int INST_ONROBOT_SD_SHANK = 28;
+        internal const int INST_ONROBOT_SD_TIGHTEN = 29;
+        internal const int INST_ONROBOT_SD_LOOSEN = 30;
+        internal const int INST_ONROBOT_SD_PREMOUNT = 31;
+        internal const int INST_ONROBOT_SD_PICK_SCREW = 32;
+        internal const int INST_ONROBOT_VG_CHANNELGRIP = 33;
+        internal const int INST_ONROBOT_VG_GRIPALL = 34;
+        internal const int INST_ONROBOT_VG_RELEASE = 35;
 
         internal const int RES_FULL_POSE = -54;              // ">54 X Y Z RX RY RZ J1 J2 J3 J4 J5 J6;" Sends all pose and joint info
         internal const int RES_END = -2147483648;            // Used to denote the end of sending messages
@@ -118,7 +125,7 @@ namespace Machina.Drivers.Communication.Protocols
                         (int) rbg.waitTime,
                     };
                     break;
-                case ActionType.OnrobotSDshank:
+                case ActionType.OnrobotSD_shank:
                     ActionOnRobotScrewDriverShank sdShank = _action as ActionOnRobotScrewDriverShank;
                     _params = new int[]
                     {
@@ -126,6 +133,80 @@ namespace Machina.Drivers.Communication.Protocols
                         INST_ONROBOT_SD_SHANK,
                         (int) cursor.screwDriverShank,
                         (int) sdShank.wait_time
+                    };
+                    break;
+                case ActionType.OnrobotSD_tighten:
+                    ActionOnRobotSD_Tighten sdTighten = _action as ActionOnRobotSD_Tighten;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_SD_TIGHTEN,
+                        (int) sdTighten.screwLength,
+                        (int) sdTighten.torque,
+                        (int) sdTighten.wait_time
+                    };
+                    break;
+                case ActionType.OnRobotSD_loosen:
+                    ActionOnRobotSD_Loosen sdLoosen = _action as ActionOnRobotSD_Loosen;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_SD_LOOSEN,
+                        (int) sdLoosen.screwLength,
+                        (int) sdLoosen.wait_time
+                    };
+                    break;
+                case ActionType.OnRobotSD_Premount:
+                    ActionOnRobotSD_Premount sdPremount = _action as ActionOnRobotSD_Premount;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_SD_PREMOUNT,
+                        (int) sdPremount.screwLength,
+                        (int) sdPremount.torque,
+                        (int) sdPremount.wait_time
+                    };
+                    break;
+                case ActionType.OnrobotSD_PickScrew:
+                    ActionOnRobotSD_PickScrew sdPickScrew = _action as ActionOnRobotSD_PickScrew;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_SD_PICK_SCREW,
+                        (int) sdPickScrew.screwLength,
+                        (int) sdPickScrew.wait_time
+                    };
+                    break;
+                case ActionType.OnRobotVG_ChannelGrip:
+                    ActionOnRobotVG_ChannelGrip vgChannelGrip = _action as ActionOnRobotVG_ChannelGrip;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_VG_CHANNELGRIP,
+                        (int) vgChannelGrip.channel01,
+                        (int) vgChannelGrip.channel02,
+                        (int) vgChannelGrip.power_limit,
+                        (int) vgChannelGrip.wait_time
+                    };
+                    break;
+                case ActionType.OnRobotVG_GripAll:
+                    ActionOnRobotVG_GripAll vgGripAll = _action as ActionOnRobotVG_GripAll;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_VG_GRIPALL,
+                        (int) vgGripAll.channels,
+                        (int) vgGripAll.power_limit,
+                        (int) vgGripAll.wait_time
+                    };
+                    break;
+                case ActionType.OnRobotVG_Release:
+                    ActionOnRobotVG_Release vgRelease = _action as ActionOnRobotVG_Release;
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_ONROBOT_VG_RELEASE,
+                        (int) vgRelease.wait_time
                     };
                     break;
                 case ActionType.Translation:

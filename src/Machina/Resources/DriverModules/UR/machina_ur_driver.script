@@ -51,6 +51,13 @@ def machina_ur_driver():
   # custom code by Arastoo for Onrobot Gripper RG7
   INST_ONROBOT_RG6 = 27
   INST_ONROBOT_ScrewDriverShank = 28
+  INST_ONROBOT_ScrewDriverTighten = 29
+  INST_ONROBOT_ScrewDriverLoosen = 30
+  INST_ONROBOT_ScrewDriverPremount = 31
+  INST_ONROBOT_ScrewDriverPickScrew = 32
+  INST_ONROBOT_VG10ChannelGrip = 33
+  INST_ONROBOT_VG10ChannelGripAll = 34
+  INST_ONROBOT_VG10Release = 35
 
   # # Some conventions for string parsing (NOT IMPLEMENTED, trying to figure out a solution compatible with SW3.0)
   # STR_MESSAGE_END_CHAR = ";"        # Marks the end of a message
@@ -208,31 +215,132 @@ def machina_ur_driver():
 
       elif action_code == INST_ONROBOT_RG6:
         params3 = socket_read_binary_integer(3)
-        grip_distance = params3[1]
-        grip_force = params3[2]
-        grip_wait_time = params3[3]
+        tool_param_01 = params3[1]
+        tool_param_02 = params3[2]
+        wait_time = params3[3]
 
         # distance, payload, inplace/moving
-        Gripper_Action_Concat01 = str_cat("RG6^" ,grip_distance)
-        Gripper_Action_Concat02 = str_cat("^" ,grip_force)
+        concat01 = str_cat("RG6^" ,tool_param_01)
+        concat02 = str_cat("^" ,tool_param_02)
 
-        RGCat_Seg_01 = str_cat(Gripper_Action_Concat01,Gripper_Action_Concat02)
-        RGCat = str_cat(RGCat_Seg_01,"^")
+        seg_01 = str_cat(concat01,concat02)
+        final_cat = str_cat(seg_01,"^")
 
-        socket_send_string(RGCat)
-        sleep(grip_wait_time / 1000.0)
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
 
       elif action_code == INST_ONROBOT_ScrewDriverShank:
         params2 = socket_read_binary_integer(2)
-        shank_position = params2[1]
-        grip_wait_time = params2[2]
+        tool_param_01 = params2[1]
+        wait_time = params2[2]
 
-        Shank_Action_Concat01 = str_cat("SDSHANK^" ,shank_position)
+        concat01 = str_cat("SDSHANK^" ,tool_param_01)
 
-        SD_ShankCat = str_cat(Shank_Action_Concat01,"^")
+        final_cat = str_cat(concat01,"^")
 
-        socket_send_string(SD_ShankCat)
-        sleep(grip_wait_time / 1000.0)
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_ScrewDriverTighten:
+        params3 = socket_read_binary_integer(3)
+        tool_param_01 = params3[1]
+        tool_param_02 = params3[2]
+        wait_time = params3[3]
+
+        # distance, payload, inplace/moving
+        concat01 = str_cat("SDTIGHT^" ,tool_param_01)
+        concat02 = str_cat("^" ,tool_param_02)
+
+        seg_01 = str_cat(concat01,concat02)
+        final_cat = str_cat(seg_01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_ScrewDriverLoosen:
+        params2 = socket_read_binary_integer(2)
+        tool_param_01 = params2[1]
+        wait_time = params2[2]
+
+        concat01 = str_cat("SDLOOSE^" ,tool_param_01)
+
+        final_cat = str_cat(concat01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_ScrewDriverPremount:
+        params3 = socket_read_binary_integer(3)
+        tool_param_01 = params3[1]
+        tool_param_02 = params3[2]
+        wait_time = params3[3]
+
+        # distance, payload, inplace/moving
+        concat01 = str_cat("SDPREMOUNT^" ,tool_param_01)
+        concat02 = str_cat("^" ,tool_param_02)
+
+        seg_01 = str_cat(concat01,concat02)
+        final_cat = str_cat(seg_01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_ScrewDriverPickScrew:
+        params2 = socket_read_binary_integer(2)
+        tool_param_01 = params2[1]
+        wait_time = params2[2]
+
+        concat01 = str_cat("SDPICKSCREW^" ,tool_param_01)
+
+        final_cat = str_cat(concat01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_VG10ChannelGrip:
+        params4 = socket_read_binary_integer(4)
+        tool_param_01 = params4[1]
+        tool_param_02 = params4[2]
+        tool_param_03 = params4[3]
+        wait_time = params4[4]
+
+        
+        concat01 = str_cat("VG10CHGRIP^" ,tool_param_01)
+        concat02 = str_cat("^" ,tool_param_02)
+        concat03 = str_cat("^" ,tool_param_03)
+
+        seg_01 = str_cat(concat01,concat02)
+        seg_02 = str_cat(seg_01,concat03)
+        final_cat = str_cat(seg_02,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_VG10ChannelGripAll:
+        params3 = socket_read_binary_integer(3)
+        tool_param_01 = params3[1]
+        tool_param_02 = params3[2]
+        wait_time = params3[3]
+
+        concat01 = str_cat("VG10GRIPALL^" ,tool_param_01)
+        concat02 = str_cat("^" ,tool_param_02)
+
+        seg_01 = str_cat(concat01,concat02)
+        final_cat = str_cat(seg_01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
+
+      elif action_code == INST_ONROBOT_VG10Release:
+        params1 = socket_read_binary_integer(1)
+        wait_time = params1[1]
+
+        concat01 = str_cat("VG10RELEASE^" ,"^")
+
+        final_cat = str_cat(concat01,"^")
+
+        socket_send_string(final_cat)
+        sleep(wait_time / 1000.0)
 
       elif action_code == INST_ALL_SPEED:
         params1 = socket_read_binary_integer(1)

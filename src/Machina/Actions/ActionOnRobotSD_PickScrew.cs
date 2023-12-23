@@ -18,40 +18,37 @@ namespace Machina
     //   ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝  ╚═╝
 
     /// <summary>
-    /// An Action to control the Onrobot RG6 Gripper.  @Developed by Arastoo Khajehee 
+    /// An Action to control the Onrobot Screw Driver Shank.  @Developed by Arastoo Khajehee 
     /// </summary>
-    public class ActionRG6Gripper : Action
+    public class ActionOnRobotSD_PickScrew : Action
     {
-        public int gripperDistance;
-        public int gripStrength;
-        public int waitTime;
+        public int screwLength;
+        public int wait_time;
 
-        public override ActionType Type => ActionType.OnrobotRG6;
+        public override ActionType Type => ActionType.OnrobotSD_PickScrew;
 
-        public ActionRG6Gripper(int gripperValue, int heldObjectWeight, int waitTime) : base()
+        public ActionOnRobotSD_PickScrew(int screwLength, int wait_time) : base()
         {
-            this.gripperDistance = gripperValue;
-            this.gripStrength = heldObjectWeight;
-            this.waitTime = waitTime;   
+            this.screwLength = screwLength;
+            this.wait_time = wait_time;
         }
 
         public override string ToString()
         {
-            
-                return string.Format("Set gripper distance to {0} mm with a {1}-newton power_limit pausing {2} milliseconds",
-                    this.gripperDistance,
-                    this.gripStrength,
-                    this.waitTime);
+
+            return string.Format("OnRobot Screw Driver Pick Up a {0}mm screw with a {1} millisecond pause",
+                this.screwLength,
+                this.wait_time
+                );
         }
 
 
         public override string ToInstruction()
         {
-            
-            return string.Format("GripperTo({0},{1},{2});",
-                this.gripperDistance,
-                this.gripStrength,
-                this.waitTime
+
+            return string.Format("SD_PickScrew({0},{1});",
+                this.screwLength,
+                this.wait_time
             );
 
         }

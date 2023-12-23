@@ -18,40 +18,53 @@ namespace Machina
     //   ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝  ╚═╝
 
     /// <summary>
-    /// An Action to control the Onrobot RG6 Gripper.  @Developed by Arastoo Khajehee 
+    /// An Action to control the Onrobot Screw Driver Shank.  @Developed by Arastoo Khajehee 
     /// </summary>
-    public class ActionRG6Gripper : Action
+    public class ActionOnRobotSD_Tighten : Action
     {
-        public int gripperDistance;
-        public int gripStrength;
-        public int waitTime;
+        public int screwLength;
+        public int torque;
+        public int wait_time;
 
-        public override ActionType Type => ActionType.OnrobotRG6;
+        
 
-        public ActionRG6Gripper(int gripperValue, int heldObjectWeight, int waitTime) : base()
+        public override ActionType Type => ActionType.OnrobotSD_tighten;
+
+        public ActionOnRobotSD_Tighten(int screwLength, int torque, int wait_time) : base()
         {
-            this.gripperDistance = gripperValue;
-            this.gripStrength = heldObjectWeight;
-            this.waitTime = waitTime;   
+            this.screwLength = screwLength;
+            this.torque = torque;
+            this.wait_time = wait_time;
         }
 
         public override string ToString()
         {
-            
-                return string.Format("Set gripper distance to {0} mm with a {1}-newton power_limit pausing {2} milliseconds",
-                    this.gripperDistance,
-                    this.gripStrength,
-                    this.waitTime);
+
+            return string.Format("OnRobot Screw Driver Tighten a {0}mm screw with {1}Nm of power_limit with a {2} millisecond pause",
+                this.screwLength,
+                this.torque / 100.0,
+                this.wait_time
+                );
         }
 
 
         public override string ToInstruction()
         {
-            
-            return string.Format("GripperTo({0},{1},{2});",
-                this.gripperDistance,
-                this.gripStrength,
-                this.waitTime
+
+            string screwType = "";
+            foreach (string key in OnRobotDefaults.OnRobotScewTypes.Keys)
+            {
+                if (OnRobotDefaults.OnRobotScewTypes[key] == this.torque) 
+                {
+                    screwType = key;
+                    break;
+                }
+            }
+
+            return string.Format("SD_Tighten({0},{1},{2});",
+                this.screwLength,
+                screwType,
+                this.wait_time
             );
 
         }

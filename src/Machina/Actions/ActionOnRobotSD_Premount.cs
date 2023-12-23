@@ -18,40 +18,44 @@ namespace Machina
     //   ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝  ╚═╝
 
     /// <summary>
-    /// An Action to control the Onrobot RG6 Gripper.  @Developed by Arastoo Khajehee 
+    /// An Action to control the Onrobot Screw Driver Shank.  @Developed by Arastoo Khajehee 
     /// </summary>
-    public class ActionRG6Gripper : Action
+    public class ActionOnRobotSD_Premount : Action
     {
-        public int gripperDistance;
-        public int gripStrength;
-        public int waitTime;
+        public int screwLength;
+        public int torque;
+        public int wait_time;
 
-        public override ActionType Type => ActionType.OnrobotRG6;
+        public override ActionType Type => ActionType.OnRobotSD_Premount;
 
-        public ActionRG6Gripper(int gripperValue, int heldObjectWeight, int waitTime) : base()
+        public ActionOnRobotSD_Premount(int screwLength, int torque, int wait_time) : base()
         {
-            this.gripperDistance = gripperValue;
-            this.gripStrength = heldObjectWeight;
-            this.waitTime = waitTime;   
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+
+            this.screwLength = screwLength;
+            this.torque = torque;
+            this.wait_time = wait_time;
         }
 
         public override string ToString()
         {
-            
-                return string.Format("Set gripper distance to {0} mm with a {1}-newton power_limit pausing {2} milliseconds",
-                    this.gripperDistance,
-                    this.gripStrength,
-                    this.waitTime);
+
+            return string.Format("OnRobot Screw Driver Premount a {0}mm screw with {1}Nm of power_limit with a {2} millisecond pause",
+                this.screwLength,
+                this.torque / OnRobotDefaults.tourqueScaleRatio,
+                this.wait_time
+                );
         }
 
 
         public override string ToInstruction()
         {
-            
-            return string.Format("GripperTo({0},{1},{2});",
-                this.gripperDistance,
-                this.gripStrength,
-                this.waitTime
+
+            return string.Format("SD_Premount({0},{1},{2});",
+                this.screwLength,
+                this.torque / OnRobotDefaults.tourqueScaleRatio,
+                this.wait_time
             );
 
         }

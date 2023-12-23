@@ -95,6 +95,13 @@
     <Compile Include="Actions\ActionIODigital.cs" />
     <Compile Include="Actions\ActionMessage.cs" />
     <Compile Include="Actions\ActionMotionMode.cs" />
+    <Compile Include="Actions\ActionOnRobotSD_Loosen.cs" />
+    <Compile Include="Actions\ActionOnRobotSD_PickScrew.cs" />
+    <Compile Include="Actions\ActionOnRobotSD_Premount.cs" />
+    <Compile Include="Actions\ActionOnRobotSD_Tighten.cs" />
+    <Compile Include="Actions\ActionOnRobotVG_ChannelGrip.cs" />
+    <Compile Include="Actions\ActionOnRobotVG_GripAll.cs" />
+    <Compile Include="Actions\ActionOnRobotVG_Release.cs" />
     <Compile Include="Actions\ActionPrecision.cs" />
     <Compile Include="Actions\ActionPushPop.cs" />
     <Compile Include="Actions\ActionRG6Gripper.cs" />
@@ -138,6 +145,7 @@
     <Compile Include="IO\IO.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Net\Net.cs" />
+    <Compile Include="OnRobotDefaults.cs" />
     <Compile Include="Types\Geometry\AxisAngle.cs" />
     <Compile Include="Types\Geometry\ExternalAxes.cs" />
     <Compile Include="Types\Data\RobotProgramFile.cs" />

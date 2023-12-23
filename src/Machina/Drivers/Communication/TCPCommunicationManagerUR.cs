@@ -380,7 +380,41 @@ namespace Machina.Drivers.Communication
                             ParseScrewDriverShankCall(result);
                             continue;
                         }
-
+                        else if (result.Contains("SDTIGHT"))
+                        {
+                            ParseScrewDriverTightenCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDLOOSE"))
+                        {
+                            ParseScrewDriverLoosenCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDPREMOUNT"))
+                        {
+                            ParseScrewDriverPremountCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDPICKSCREW"))
+                        {
+                            ParseScrewDriverPickScrewCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10CHGRIP"))
+                        {
+                            ParseVG10ChannelGripCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10GRIPALL"))
+                        {
+                            ParseVG10GripAllCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10RELEASE"))
+                        {
+                            ParseVG10ReleaseCall(result);
+                            continue;
+                        }
 
                         _serverListeningInts = Utilities.Conversion.ByteArrayToInt32Array(_serverListeningBytes, receivedCount, false);
 
@@ -436,7 +470,6 @@ namespace Machina.Drivers.Communication
 
             logger.Debug("Stopped TCP server listener for UR robot communication");
         }
-
 
         private bool WaitForInitialization()
         {
@@ -732,7 +765,97 @@ namespace Machina.Drivers.Communication
             await GetRequest(API_Request);
         }
 
+        private static async void ParseScrewDriverTightenCall(string response)
+        {
+            string[] parts = response.Split('^');
 
+            int screwLength = Convert.ToInt32(parts[1]);
+            int torque = Convert.ToInt32(parts[2]);
+
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+            double torqueDouble = torque / 100.0;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/tighten/0/25/{0}/{1}", screwLength, torqueDouble);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverLoosenCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/loosen/0/25/{0}", screwLength);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverPremountCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+            int torque = Convert.ToInt32(parts[2]);
+
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+            double torqueDouble = torque / 100.0;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/premount/0/25/{0}/{1}", screwLength, torqueDouble);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverPickScrewCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/pickup_screw/0/25/{0}", screwLength);
+
+            await GetRequest(API_Request);
+        }
+        private static async void ParseVG10ChannelGripCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int channel01 = Convert.ToInt32(parts[1]);
+            int channel02 = Convert.ToInt32(parts[2]);
+
+            int force = Convert.ToInt32(parts[3]);
+
+            string API_Request01 = string.Format("http://192.168.1.1/api/dc/vg10/set_current_limit/0/{0}", force);
+            string API_Request02 = string.Format("http://192.168.1.1/api/dc/vg10/set_grip_all/0/{0}/{1}", channel01, channel02);
+
+            await GetRequest(API_Request01);
+            System.Threading.Thread.Sleep(20);
+            await GetRequest(API_Request02);
+        }
+        private static async void ParseVG10GripAllCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int channels = Convert.ToInt32(parts[1]);
+
+            int force = Convert.ToInt32(parts[2]);
+
+            string API_Request01 = string.Format("http://192.168.1.1/api/dc/vg10/set_current_limit/0/{0}", force);
+            string API_Request02 = string.Format("http://192.168.1.1/api/dc/vg10/set_grip_all/0/{0}/{1}", channels, channels);
+
+            await GetRequest(API_Request01);
+            System.Threading.Thread.Sleep(20);
+            await GetRequest(API_Request02);
+        }
+        private static async void ParseVG10ReleaseCall(string response)
+        {
+            
+            string API_Request = string.Format("http://192.168.1.1/api/dc/vg10/set_release_all/0");
+
+            await GetRequest(API_Request);
+        }
 
         static async Task GetRequest(string url)
         {

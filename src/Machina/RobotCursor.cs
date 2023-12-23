@@ -483,6 +483,13 @@ namespace Machina
             { typeof (ActionArmAngle),                  (act, robCur) => robCur.ApplyAction((ActionArmAngle) act) },
             { typeof (ActionRG6Gripper),                  (act, robCur) => robCur.ApplyAction((ActionRG6Gripper) act) },
             { typeof (ActionOnRobotScrewDriverShank),     (act, robCur) => robCur.ApplyAction((ActionOnRobotScrewDriverShank) act) },
+            { typeof (ActionOnRobotSD_Tighten),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Tighten) act) },
+            { typeof (ActionOnRobotSD_Loosen),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Loosen) act) },
+            { typeof (ActionOnRobotSD_Premount),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Premount) act) },
+            { typeof (ActionOnRobotSD_PickScrew),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_PickScrew) act) },
+            { typeof (ActionOnRobotVG_ChannelGrip),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_ChannelGrip) act) },
+            { typeof (ActionOnRobotVG_GripAll),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_GripAll) act) },
+            { typeof (ActionOnRobotVG_Release),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_Release) act) },
             { typeof (ActionArcMotion),                 (act, robCur) => robCur.ApplyAction((ActionArcMotion) act) }
         };
 
@@ -560,6 +567,47 @@ namespace Machina
             return true;
         }
 
+        public bool ApplyAction(ActionOnRobotSD_Tighten action)
+        {
+
+           return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_Loosen action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_Premount action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_PickScrew action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_ChannelGrip action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_GripAll action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_Release action)
+        {
+
+            return true;
+        }
         /// <summary>
         /// Apply Speed Action.
         /// </summary>
