@@ -1,5 +1,7 @@
 ﻿using System;
 using Machina.Types.Geometry;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 //  ██╗   ██╗████████╗██╗██╗     ██╗████████╗██╗███████╗███████╗                      
 //  ██║   ██║╚══██╔══╝██║██║     ██║╚══██╔══╝██║██╔════╝██╔════╝                      
@@ -132,6 +134,20 @@ namespace Machina.Utilities
             return d;
         }
 
+        public static double?[] ToNullableDoubles(JToken token)
+        {
+            if (token == null || token.Type == JTokenType.Null)
+                return null;
+
+            if (token.Type == JTokenType.Array)
+            {
+                // Convert JArray → object[] → existing Machina utility
+                object[] objs = token.ToObject<object[]>();
+                return Machina.Utilities.Conversion.NullableDoublesFromObjects(objs);
+            }
+
+            throw new JsonException("Expected array or null, got " + token.Type);
+        }
 
         /// <summary>
         /// Quick conversion for wobjs, but totally dislike this here. Mmmm...
