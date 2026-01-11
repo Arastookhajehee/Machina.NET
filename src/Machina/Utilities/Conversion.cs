@@ -134,6 +134,12 @@ namespace Machina.Utilities
             return d;
         }
 
+        /// <summary>
+        /// Takes a Newtonsoft.Json JToken and converts it into an array of nullable doubles.
+        /// This is replacement for the NullableDoublesFromObjects function in .NetStandard and above.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static double?[] ToNullableDoubles(JToken token)
         {
             if (token == null || token.Type == JTokenType.Null)
