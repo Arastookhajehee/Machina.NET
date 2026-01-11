@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -10,6 +12,9 @@ using System.Threading.Tasks;
 using Machina.Drivers.Communication;
 using Machina.Drivers.Communication.Protocols;
 using Machina.Types.Geometry;
+
+using Newtonsoft.Json;
+
 
 namespace Machina.Drivers.Communication
 {
@@ -267,6 +272,7 @@ namespace Machina.Drivers.Communication
                 //}
 
                 Thread.Sleep(30);
+                string wait = "";
             }
         }
 
@@ -362,6 +368,54 @@ namespace Machina.Drivers.Communication
                 {
                     while (_isServerListeningRunning && (receivedCount = _robotNetworkStream.Read(_serverListeningBytes, 0, _serverListeningBytes.Length)) != 0)
                     {
+                        string result = System.Text.Encoding.ASCII.GetString(_serverListeningBytes);
+
+                        if (result.Contains("RG6")) 
+                        {
+                            ParseRG6Call(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDSHANK"))
+                        {
+                            ParseScrewDriverShankCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDTIGHT"))
+                        {
+                            ParseScrewDriverTightenCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDLOOSE"))
+                        {
+                            ParseScrewDriverLoosenCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDPREMOUNT"))
+                        {
+                            ParseScrewDriverPremountCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("SDPICKSCREW"))
+                        {
+                            ParseScrewDriverPickScrewCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10CHGRIP"))
+                        {
+                            ParseVG10ChannelGripCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10GRIPALL"))
+                        {
+                            ParseVG10GripAllCall(result);
+                            continue;
+                        }
+                        else if (result.Contains("VG10RELEASE"))
+                        {
+                            ParseVG10ReleaseCall(result);
+                            continue;
+                        }
+
                         _serverListeningInts = Utilities.Conversion.ByteArrayToInt32Array(_serverListeningBytes, receivedCount, false);
 
                         logger.Debug("Received (id): [" + string.Join(",", _serverListeningInts) + "]");
@@ -416,7 +470,6 @@ namespace Machina.Drivers.Communication
 
             logger.Debug("Stopped TCP server listener for UR robot communication");
         }
-
 
         private bool WaitForInitialization()
         {
@@ -674,6 +727,157 @@ namespace Machina.Drivers.Communication
             logger.Debug(ids);
             logger.Debug("");
         }
+
+        private static async void ParseRG6Call(string response) 
+        {
+             
+            string[] parts = response.Split('^');
+
+            int distance = Convert.ToInt32(parts[1]);
+            int force = Convert.ToInt32(parts[2]);
+
+            distance = distance < 0 ? 0 : distance;
+            distance = distance > 150 ? 150 : distance;
+
+            // there is a bit of offset in the RG6 gripper for some reason.
+            distance += 5;
+
+            force = force < 25 ? 25 : force;
+            force = force > 120 ? 120 : force;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/rgxp2/set_width/0/{0}/{1}", distance,force);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverShankCall(string response)
+        {
+
+            string[] parts = response.Split('^');
+
+            int shankPosition = Convert.ToInt32(parts[1]);
+
+            shankPosition = shankPosition < 0 ? 0 : shankPosition;
+            shankPosition = shankPosition > 55 ? 55 : shankPosition;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/move_shank/0/{0}", shankPosition);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverTightenCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+            int torque = Convert.ToInt32(parts[2]);
+
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+            double torqueDouble = torque / 100.0;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/tighten/0/25/{0}/{1}", screwLength, torqueDouble);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverLoosenCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/loosen/0/25/{0}", screwLength);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverPremountCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+            int torque = Convert.ToInt32(parts[2]);
+
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+            double torqueDouble = torque / 100.0;
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/premount/0/25/{0}/{1}", screwLength, torqueDouble);
+
+            await GetRequest(API_Request);
+        }
+
+        private static async void ParseScrewDriverPickScrewCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int screwLength = Convert.ToInt32(parts[1]);
+
+            string API_Request = string.Format("http://192.168.1.1/api/dc/sd/pickup_screw/0/25/{0}", screwLength);
+
+            await GetRequest(API_Request);
+        }
+        private static async void ParseVG10ChannelGripCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int channel01 = Convert.ToInt32(parts[1]);
+            int channel02 = Convert.ToInt32(parts[2]);
+
+            int force = Convert.ToInt32(parts[3]);
+
+            string API_Request01 = string.Format("http://192.168.1.1/api/dc/vg10/set_current_limit/0/{0}", force);
+            string API_Request02 = string.Format("http://192.168.1.1/api/dc/vg10/set_grip_all/0/{0}/{1}", channel01, channel02);
+
+            await GetRequest(API_Request01);
+            System.Threading.Thread.Sleep(20);
+            await GetRequest(API_Request02);
+        }
+        private static async void ParseVG10GripAllCall(string response)
+        {
+            string[] parts = response.Split('^');
+
+            int channels = Convert.ToInt32(parts[1]);
+
+            int force = Convert.ToInt32(parts[2]);
+
+            string API_Request01 = string.Format("http://192.168.1.1/api/dc/vg10/set_current_limit/0/{0}", force);
+            string API_Request02 = string.Format("http://192.168.1.1/api/dc/vg10/set_grip_all/0/{0}/{1}", channels, channels);
+
+            await GetRequest(API_Request01);
+            System.Threading.Thread.Sleep(20);
+            await GetRequest(API_Request02);
+        }
+        private static async void ParseVG10ReleaseCall(string response)
+        {
+            
+            string API_Request = string.Format("http://192.168.1.1/api/dc/vg10/set_release_all/0");
+
+            await GetRequest(API_Request);
+        }
+
+        static async Task GetRequest(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    // Output the response content.
+                    Console.WriteLine(responseBody);
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message: {0}", e.Message);
+                }
+            }
+        }
+
 
     }
 }

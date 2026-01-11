@@ -98,25 +98,25 @@ namespace Machina.Utilities
         /// </summary>
         /// <param name="objs"></param>
         /// <returns></returns>
-        public static string ObjectArrayToString(object[] objs, char separator = ',')
-        {
-            if (objs == null) return null;
+        //public static string ObjectArrayToString(object[] objs, char separator = ',')
+        //{
+        //    if (objs == null) return null;
 
-            string str = "";
-            for (int i = 0; i < objs.Length; i++)
-            {
-                str += objs[i]?.ToString() ?? "null";
-                if (i < objs.Length - 1)
-                {
-                    str += ',';
-                }
-            }
-            return str;
-        }
+        //    string str = "";
+        //    for (int i = 0; i < objs.Length; i++)
+        //    {
+        //        str += objs[i]?.ToString() ?? "null";
+        //        if (i < objs.Length - 1)
+        //        {
+        //            str += ',';
+        //        }
+        //    }
+        //    return str;
+        //}
 
         /// <summary>
         /// Given an array of strings, returns an enumerated quoted string with custom intermediate and closing separators.
-        /// For example, for ["foo", "bar", "baz], returns '"foo", "bar" & "bar"'.
+        /// For example, for ["foo", "bar", "baz], returns '"foo", "bar" and "bar"'.
         /// </summary>
         /// <param name="strings"></param>
         /// <param name="separator"></param>

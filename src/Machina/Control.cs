@@ -1028,6 +1028,33 @@ namespace Machina
                 IssueApplyActionRequest(new ActionIOAnalog(pinId, value, toolPin));
 
 
+        public bool IssueGripperRequest(int gripperDistance, int gripForce, int waitTime) =>
+                IssueApplyActionRequest(new ActionRG6Gripper(gripperDistance, gripForce, waitTime));
+
+        public bool IssueOnRobotScrewDriverRequest(int shankPosition, int waitTime) =>
+                IssueApplyActionRequest(new ActionOnRobotScrewDriverShank(shankPosition, waitTime));
+
+        public bool IssueOnRobotScrewDriverTightenRequest(int screwLength, int torque, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotSD_Tighten(screwLength, torque, wait_time));
+
+        public bool IssueOnRobotScrewDriverLoosenRequest(int screwLength, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotSD_Loosen(screwLength, wait_time));
+
+        public bool IssueOnRobotScrewDriverPremountRequest(int screwLength, int torque, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotSD_Premount(screwLength, torque, wait_time));
+
+        public bool IssueOnRobotScrewDriverPickScrewRequest(int screwLength, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotSD_PickScrew(screwLength, wait_time));
+
+        public bool IssueOnRobotVG10ChannelGripRequest(int channel01, int channel02, int force, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotVG_ChannelGrip (channel01, channel02, force, wait_time));
+
+        public bool IssueOnRobotVG10GripAllRequest(int channels, int force, int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotVG_GripAll(channels, force, wait_time));
+
+        public bool IssueOnRobotVG10ReleaseRequest(int wait_time) =>
+                IssueApplyActionRequest(new ActionOnRobotVG_Release(wait_time));
+
         /// <summary>
         /// Issue a request to add common initialization/termination procedures on the device, 
         /// like homing, calibration, fans, etc.

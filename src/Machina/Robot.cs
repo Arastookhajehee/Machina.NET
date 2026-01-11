@@ -363,6 +363,112 @@ namespace Machina
         //  ███████║███████╗   ██║      ██║   ██║██║ ╚████║╚██████╔╝███████║
         //  ╚══════╝╚══════╝   ╚═╝      ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝
 
+
+        [ParseableFromString]
+        public bool GripperTo(int gripperDistance, int gripForce, int waitTime)
+        {
+
+           return c.IssueGripperRequest(gripperDistance, gripForce, waitTime);
+              
+        }
+
+        [ParseableFromString]
+        public bool SD_ShankTo(int shankPosition, int waitTime)
+        {
+
+            return c.IssueOnRobotScrewDriverRequest(shankPosition, waitTime);
+
+        }
+
+
+        [ParseableFromString]
+        public bool SD_Tighten(int screwLength, string screwType,int waitTime)
+        {
+
+
+            int torque = -1;
+            try
+            {
+                torque = OnRobotDefaults.OnRobotScewTypes[screwType.ToUpper()];
+                return c.IssueOnRobotScrewDriverTightenRequest(screwLength, torque, waitTime);
+            }
+            catch
+            {
+                logger.Error($"{screwType} is not a valid screw type, please specify one of the following: ");
+                foreach (string str in OnRobotDefaults.OnRobotScewTypes.Keys)
+                {
+                    logger.Error(str);
+                }
+            }
+            return false;
+        }
+
+        [ParseableFromString]
+        public bool SD_Loosen(int screwLength, int waitTime)
+        {
+
+            return c.IssueOnRobotScrewDriverLoosenRequest(screwLength, waitTime);
+
+        }
+
+        [ParseableFromString]
+        public bool SD_Premount(int screwLength, double torque, int waitTime)
+        {
+            torque *= OnRobotDefaults.tourqueScaleRatio;
+
+            torque = torque < 17 ? 17 : torque;
+            torque = torque > 500 ? 500 : torque;
+
+            return c.IssueOnRobotScrewDriverPremountRequest(screwLength, (int) torque, waitTime);
+
+        }
+
+        [ParseableFromString]
+        public bool SD_PickScrew(int screwLength, int waitTime)
+        {
+
+            return c.IssueOnRobotScrewDriverPickScrewRequest(screwLength, waitTime);
+
+        }
+
+        [ParseableFromString]
+        public bool VG10_ChannelGrip(int channel01, int channel02, int force, int waitTime)
+        {
+
+            force = force < 100 ? 100 : force;
+            force = force > 1000 ? 1000 : force;
+
+            channel01 = channel01 < 5 ? 5 : channel01;
+            channel01 = channel01 > 80 ? 80 : channel01;
+
+            channel02 = channel02 < 5 ? 5 : channel02;
+            channel02 = channel02 > 80 ? 80 : channel02;
+
+            return c.IssueOnRobotVG10ChannelGripRequest(channel01, channel02, force, waitTime);
+
+        }
+
+        [ParseableFromString]
+        public bool VG10_GripAll(int channels, int force, int waitTime)
+        {
+
+            force = force < 100 ? 100 : force;
+            force = force > 1000 ? 1000 : force;
+
+            channels = channels < 5 ? 5 : channels;
+            channels = channels > 80 ? 80 : channels;
+
+            return c.IssueOnRobotVG10GripAllRequest(channels, force, waitTime);
+
+        }
+
+        [ParseableFromString]
+        public bool VG10_Release(int waitTime)
+        {
+
+            return c.IssueOnRobotVG10ReleaseRequest(waitTime);
+
+        }
         /// <summary>
         /// Sets the motion type (linear, joint...) for future issued Actions.
         /// </summary>
@@ -1737,14 +1843,14 @@ namespace Machina
         //  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
         //                                                                  
         /// <summary>
-        /// A <Name, MethodInfo> dict of reflected methods from the main Robot class, 
+        /// A dict of reflected methods from the main Robot class, 
         /// that can be invoked from parsed strings from primitive values. 
         /// Such methods are flagged with attributes, and loaded at runtime. 
         /// </summary>
         internal static Dictionary<string, MethodInfo> _reflectedAPI;
 
         /// <summary>
-        /// A <Name, MethodInfo> dict of CASE-INSENSITIVE reflected methods from the main Robot class, 
+        /// A dict of CASE-INSENSITIVE reflected methods from the main Robot class, 
         /// that can be invoked from parsed strings from primitive values. 
         /// Such methods are flagged with attributes, and loaded at runtime. 
         /// </summary>

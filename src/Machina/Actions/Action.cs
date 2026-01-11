@@ -41,7 +41,16 @@ namespace Machina
         ExternalAxis,
         CustomCode,
         ArmAngle,
-        ArcMotion
+        ArcMotion,
+        OnrobotRG6,
+        OnrobotSD_shank,
+        OnrobotSD_tighten,
+        OnRobotSD_loosen,
+        OnRobotSD_Premount,
+        OnrobotSD_PickScrew,
+        OnRobotVG_GripAll,
+        OnRobotVG_ChannelGrip,
+        OnRobotVG_Release
     }
 
     

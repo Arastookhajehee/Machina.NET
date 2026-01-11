@@ -63,6 +63,13 @@ namespace Machina
         public Dictionary<RobotPartType, double> partTemperature;
         public double extrudedLength, prevExtrudedLength;  // the length of filament that has been extruded, i.e. the "E" parameter
 
+        // Gripper
+        public double gripperDistance = 75.0;
+        public double gripForce = 80.0;
+
+        // ScrewDriver
+        public double screwDriverShank = 20;
+
         /// <summary>
         /// Last Action that was applied to this cursor
         /// </summary>
@@ -474,6 +481,15 @@ namespace Machina
             { typeof (ActionExternalAxis),              (act, robCur) => robCur.ApplyAction((ActionExternalAxis) act) },
             { typeof (ActionCustomCode),                (act, robCur) => robCur.ApplyAction((ActionCustomCode) act) },
             { typeof (ActionArmAngle),                  (act, robCur) => robCur.ApplyAction((ActionArmAngle) act) },
+            { typeof (ActionRG6Gripper),                  (act, robCur) => robCur.ApplyAction((ActionRG6Gripper) act) },
+            { typeof (ActionOnRobotScrewDriverShank),     (act, robCur) => robCur.ApplyAction((ActionOnRobotScrewDriverShank) act) },
+            { typeof (ActionOnRobotSD_Tighten),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Tighten) act) },
+            { typeof (ActionOnRobotSD_Loosen),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Loosen) act) },
+            { typeof (ActionOnRobotSD_Premount),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_Premount) act) },
+            { typeof (ActionOnRobotSD_PickScrew),     (act, robCur) => robCur.ApplyAction((ActionOnRobotSD_PickScrew) act) },
+            { typeof (ActionOnRobotVG_ChannelGrip),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_ChannelGrip) act) },
+            { typeof (ActionOnRobotVG_GripAll),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_GripAll) act) },
+            { typeof (ActionOnRobotVG_Release),     (act, robCur) => robCur.ApplyAction((ActionOnRobotVG_Release) act) },
             { typeof (ActionArcMotion),                 (act, robCur) => robCur.ApplyAction((ActionArcMotion) act) }
         };
 
@@ -525,6 +541,73 @@ namespace Machina
             return true;
         }
 
+        public bool ApplyAction(ActionRG6Gripper action)
+        {
+            
+            this.gripperDistance = action.gripperDistance;
+
+            if (this.gripperDistance < 0) this.gripperDistance = 0;
+            if (this.gripperDistance > 150) this.gripperDistance = 150;
+
+            this.gripForce = action.gripStrength;
+            if (this.gripForce < 25) this.gripForce = 25;
+            if (this.gripForce > 120) this.gripForce = 120;
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotScrewDriverShank action)
+        {
+
+            this.screwDriverShank = action.shankPosition;
+
+            if (this.screwDriverShank < 0) this.screwDriverShank = 0;
+            if (this.screwDriverShank > 55) this.screwDriverShank = 55;
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_Tighten action)
+        {
+
+           return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_Loosen action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_Premount action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotSD_PickScrew action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_ChannelGrip action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_GripAll action)
+        {
+
+            return true;
+        }
+
+        public bool ApplyAction(ActionOnRobotVG_Release action)
+        {
+
+            return true;
+        }
         /// <summary>
         /// Apply Speed Action.
         /// </summary>
