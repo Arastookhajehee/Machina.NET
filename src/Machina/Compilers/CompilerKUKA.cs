@@ -529,6 +529,10 @@ namespace Machina
                         ac.comment);
                     break;
 
+                case ActionType.SyncCurrent:
+                    dec = string.Format("  {0} SyncCurrent()", CC);
+                    break;
+
                 case ActionType.DefineTool:
                     ActionDefineTool adt = action as ActionDefineTool;
                     dec = string.Format("  {0} Tool \"{1}\" defined",  // this action has no actual instruction, just add a comment
@@ -710,6 +714,10 @@ namespace Machina
                     dec = string.Format("  {0} {1}",
                         CC,
                         ac.comment);
+                    break;
+
+                case ActionType.SyncCurrent:
+                    dec = string.Format("  {0} SyncCurrent()", CC);
                     break;
 
                 case ActionType.DefineTool:

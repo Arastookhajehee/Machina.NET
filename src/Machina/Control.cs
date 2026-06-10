@@ -1101,6 +1101,9 @@ namespace Machina
         public bool IssueInitializationRequest(bool initiate) =>
                 IssueApplyActionRequest(new ActionInitialization(initiate));
 
+        public bool IssueSyncCurrentRequest() =>
+                IssueApplyActionRequest(new ActionSyncCurrent());
+
 
         /// <summary>
         /// Issue a request to modify a external axis in this robot.

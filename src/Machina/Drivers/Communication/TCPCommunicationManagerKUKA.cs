@@ -203,39 +203,35 @@ namespace Machina.Drivers.Communication
 
                 var actionMsgContentList = new List<Action>();
                 int msgListCount = 0;
-                while (this.ShouldSend() && this._releaseCursor.AreActionsPending())
+                while (msgListCount < howManyToSend && this.ShouldSend() && this._releaseCursor.AreActionsPending())
                 {
 
                     // @TODO: THIS WILL NEED TO BE CHANGED TO CONVERT A BUNCH OF ACTIONS INTO ONE SINGLE MESSAGE...
                     string msgString = "";
                     Action action = null;
                     List<string> msgs = this._translator.GetMessagesForNextAction_KUKA(this._releaseCursor,out action);
+
                     actionMsgContentList.Add(action);
                     foreach (string messagePart in msgs) xmlMessageBlock += messagePart;
                     // Action was released to the ***ActionList, raise event
                     this._parentDriver.parentControl.RaiseActionReleasedEvent();
                     msgListCount++;
+                }
 
-                    //countForEnoughMessages++;
-                    if (msgListCount == howManyToSend)
+                if (msgListCount > 0)
+                {
+                    xmlMessageBlock += closingMsgXML;
+                    for (int i = 0; i < msgListCount; i++)
                     {
-                        
-                        // adding the messages and closig the xml structure
-                        xmlMessageBlock += closingMsgXML;
-                        for (int i = 0; i < msgListCount; i++)
-                        {
-                            xmlMessageBlock += Get_ActionMessageString(actionMsgContentList[i], i);
-                        }
-                        xmlMessageBlock += closingXML;
-
-                        _sendMsgBytes = Encoding.ASCII.GetBytes(xmlMessageBlock);
-                        _clientNetworkStream.Write(_sendMsgBytes, 0, _sendMsgBytes.Length);
-                        _sentMessages += msgListCount;
-                        logger.Debug($"Sent:");
-                        logger.Debug(xmlMessageBlock);
-                        break;
+                        xmlMessageBlock += Get_ActionMessageString(actionMsgContentList[i], i);
                     }
+                    xmlMessageBlock += closingXML;
 
+                    _sendMsgBytes = Encoding.ASCII.GetBytes(xmlMessageBlock);
+                    _clientNetworkStream.Write(_sendMsgBytes, 0, _sendMsgBytes.Length);
+                    _sentMessages += msgListCount;
+                    logger.Debug($"Sent:");
+                    logger.Debug(xmlMessageBlock);
                 }
 
                 //RaiseBufferEmptyEventCheck();

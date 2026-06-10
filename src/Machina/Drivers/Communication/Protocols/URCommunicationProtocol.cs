@@ -63,6 +63,7 @@ namespace Machina.Drivers.Communication.Protocols
         internal const int INST_ONROBOT_VG_CHANNELGRIP = 33;
         internal const int INST_ONROBOT_VG_GRIPALL = 34;
         internal const int INST_ONROBOT_VG_RELEASE = 35;
+        internal const int INST_SYNC_CURRENT = 36;
 
         internal const int RES_FULL_POSE = -54;              // ">54 X Y Z RX RY RZ J1 J2 J3 J4 J5 J6;" Sends all pose and joint info
         internal const int RES_END = -2147483648;            // Used to denote the end of sending messages
@@ -207,6 +208,13 @@ namespace Machina.Drivers.Communication.Protocols
                         _action.Id,
                         INST_ONROBOT_VG_RELEASE,
                         (int) vgRelease.wait_time
+                    };
+                    break;
+                case ActionType.SyncCurrent:
+                    _params = new int[]
+                    {
+                        _action.Id,
+                        INST_SYNC_CURRENT
                     };
                     break;
                 case ActionType.Translation:

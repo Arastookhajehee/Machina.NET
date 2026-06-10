@@ -50,7 +50,8 @@ namespace Machina
         OnrobotSD_PickScrew,
         OnRobotVG_GripAll,
         OnRobotVG_ChannelGrip,
-        OnRobotVG_Release
+        OnRobotVG_Release,
+        SyncCurrent
     }
 
     

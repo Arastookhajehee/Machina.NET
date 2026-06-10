@@ -300,6 +300,10 @@ namespace Machina
 
                     break;
 
+                case ActionType.SyncCurrent:
+                    dec = $"{CC} SyncCurrent()";
+                    break;
+
                 case ActionType.CustomCode:
                     ActionCustomCode acc = action as ActionCustomCode;
                     if (!acc.isDeclaration)

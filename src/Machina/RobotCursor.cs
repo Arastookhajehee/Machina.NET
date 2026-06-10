@@ -487,6 +487,7 @@ namespace Machina
             { typeof (ActionExtrusion),                 (act, robCur) => robCur.ApplyAction((ActionExtrusion) act) },
             { typeof (ActionExtrusionRate),             (act, robCur) => robCur.ApplyAction((ActionExtrusionRate) act) },
             { typeof (ActionInitialization),            (act, robCur) => robCur.ApplyAction((ActionInitialization) act) },
+            { typeof (ActionSyncCurrent),               (act, robCur) => robCur.ApplyAction((ActionSyncCurrent) act) },
             { typeof (ActionExternalAxis),              (act, robCur) => robCur.ApplyAction((ActionExternalAxis) act) },
             { typeof (ActionCustomCode),                (act, robCur) => robCur.ApplyAction((ActionCustomCode) act) },
             { typeof (ActionArmAngle),                  (act, robCur) => robCur.ApplyAction((ActionArmAngle) act) },
@@ -1372,6 +1373,11 @@ namespace Machina
         public bool ApplyAction(ActionInitialization action)
         {
             // nothing to do here really... 
+            return true;
+        }
+
+        public bool ApplyAction(ActionSyncCurrent action)
+        {
             return true;
         }
 

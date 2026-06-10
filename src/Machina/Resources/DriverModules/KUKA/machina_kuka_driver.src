@@ -190,6 +190,7 @@ FOR FI = 1 TO 200 STEP 1
 ;ExternalAxis = 23
 ;CustomCode = 24
 ;ArmAngle = 25
+;SyncCurrent = 26
 
 ; a switch case block that executes actions according to their types
 SWITCH actions[FI].type
@@ -385,6 +386,9 @@ CASE 25 ;ArmAngle = 25
  axispos.A6 = actions[FI].v7
  PTP axispos C_PTP
 
+CASE 26 ;SyncCurrent = 26
+ WAIT SEC 0.5
+
 DEFAULT
 ; Do Nothing
   
@@ -437,6 +441,7 @@ DEF machinafeedback( )
 ;ExternalAxis = 23
 ;CustomCode = 24
 ;ArmAngle = 25
+;SyncCurrent = 26
 IF actions[FI].type > -1 THEN
 
 RET = eki_setint("machina_kuka_server", "R/@ID", actions[FI].id) 

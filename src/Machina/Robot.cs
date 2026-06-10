@@ -306,6 +306,17 @@ namespace Machina
         }
 
         /// <summary>
+        /// Issues a SyncCurrent action marker through the normal Machina instruction flow.
+        /// This is exposed as a string-parseable command for Bridge and other text-based clients.
+        /// </summary>
+        /// <returns></returns>
+        [ParseableFromString]
+        public bool SyncCurrent()
+        {
+            return c.IssueSyncCurrentRequest();
+        }
+
+        /// <summary>
         /// Returns a string representation of the IP of the currently connected robot device.
         /// </summary>
         /// <returns></returns>

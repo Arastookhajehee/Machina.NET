@@ -142,6 +142,21 @@ namespace Machina.Drivers.Communication.Protocols
 
                     break;
 
+                case ActionType.SyncCurrent:
+                    xml += string.Format(CultureInfo.InvariantCulture,
+                        "<A ID=\"{0}\" T=\"{1}\" V1=\"{2}\" V2=\"{3}\" V3=\"{4}\" V4=\"{5}\" V5=\"{6}\" V6=\"{7}\" V7=\"{8}\"/>",
+                        action.Id,
+                        (int)action.Type,
+                        Default_Value,
+                        Default_Value,
+                        Default_Value,
+                        Default_Value,
+                        Default_Value,
+                        Default_Value,
+                        Default_Value);
+
+                    break;
+
                 case ActionType.Speed:
 
                     double linSpeed = cursor.speed * Speed_MMS_To_MS;

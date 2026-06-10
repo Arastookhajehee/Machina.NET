@@ -44,6 +44,7 @@ namespace Machina.Drivers.Communication.Protocols
 
         // 2# codes where already in use, resume motion codes on 3#... lol
         internal const int INST_MOVEC = 30;                     // MoveC eX eY eZ eQW eQX eQY eQZ tX tY tZ (end robt + through robt
+        internal const int INST_SYNC_CURRENT = 31;
 
         // Characters used for buffer parsing
         internal const char STR_MESSAGE_END_CHAR = ';';         // Marks the end of a message
@@ -167,6 +168,15 @@ namespace Machina.Drivers.Communication.Protocols
                         action.Id,
                         INST_WAITTIME,
                         0.001 * aw.millis,
+                        STR_MESSAGE_END_CHAR));
+                    break;
+
+                case ActionType.SyncCurrent:
+                    msgs.Add(string.Format(CultureInfo.InvariantCulture,
+                        "{0}{1} {2}{3}",
+                        STR_MESSAGE_ID_CHAR,
+                        action.Id,
+                        INST_SYNC_CURRENT,
                         STR_MESSAGE_END_CHAR));
                     break;
 

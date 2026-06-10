@@ -101,6 +101,7 @@ MODULE Machina_Driver
 
     ! 2# codes where already in use, resume motion codes on 3#... lol
     CONST num INST_MOVEC := 30;                     ! MoveC eX eY eZ eQW eQX eQY eQZ tX tY tZ (end robt + through robt) 
+    CONST num INST_SYNC_CURRENT := 31;              ! SyncCurrent marker, wait briefly and acknowledge normally
 
     ! (these could be straight strings since they are never used for checks...?)
     PERS num RES_VERSION := 20;                     ! ">20 1 2 1;" Sends version numbers
@@ -234,6 +235,9 @@ MODULE Machina_Driver
                     cursorRobTarget := GetRobTarget(currentAction);
                     throughRobTarget := GetThroughRobTarget(currentAction);
                     MoveC throughRobTarget, cursorRobTarget, cursorSpeed, cursorZone, cursorTool, \WObj:=cursorWObj;
+
+                CASE INST_SYNC_CURRENT:
+                    WaitTime 0.5;
 
                 CASE INST_MOVEABSJ:
                     cursorJointTarget := GetJointTarget(currentAction);
