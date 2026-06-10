@@ -595,6 +595,8 @@ namespace Machina.Drivers.Communication
                 while (nextId <= id)
                 {
                     this._motionCursor.ApplyNextAction();
+                    Action executedAction = this._motionCursor.GetLastAction();
+                    this._parentDriver.parentControl.RebaseAfterSyncCurrent(executedAction);
 
                     // Raise appropriate events
                     this._parentDriver.parentControl.RaiseActionExecutedEvent();

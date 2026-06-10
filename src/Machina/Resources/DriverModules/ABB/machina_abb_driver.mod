@@ -238,6 +238,9 @@ MODULE Machina_Driver
 
                 CASE INST_SYNC_CURRENT:
                     WaitTime 0.5;
+                    SendPose;
+                    SendJoints;
+                    SendExtAx;
 
                 CASE INST_MOVEABSJ:
                     cursorJointTarget := GetJointTarget(currentAction);

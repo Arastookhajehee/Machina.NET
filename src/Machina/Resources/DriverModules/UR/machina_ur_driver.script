@@ -345,6 +345,7 @@ def machina_ur_driver():
 
       elif action_code == INST_SYNC_CURRENT:
         sleep(0.5)
+        send_full_pose()
 
       elif action_code == INST_ALL_SPEED:
         params1 = socket_read_binary_integer(1)

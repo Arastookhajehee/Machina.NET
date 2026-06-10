@@ -422,18 +422,46 @@ namespace Machina
                 return false;
             }
 
-            Vector currPos = _driver.GetCurrentPosition();
-            Rotation currRot = _driver.GetCurrentOrientation();
-            Joints currJnts = _driver.GetCurrentJoints();
-            ExternalAxes currExtAx = _driver.GetCurrentExternalAxes();
-
-            if (currPos == null || currRot == null || currJnts == null)
+            if (!RebaseCursorsToCurrentState(true))
             {
-                logger.Warning("Driver could not provide a full current state snapshot");
                 return false;
             }
 
-            FlushCursorsWhileAlive();
+            logger.Info("Applied current robot state and cleared pending actions");
+            return true;
+        }
+
+        internal bool RebaseAfterSyncCurrent(Action executedAction)
+        {
+            if (executedAction == null || executedAction.Type != ActionType.SyncCurrent)
+            {
+                return true;
+            }
+
+            bool success = RebaseCursorsToCurrentState(false);
+            if (success)
+            {
+                logger.Info("Synced current robot state from device");
+            }
+            else
+            {
+                logger.Warning("SyncCurrent executed, but Machina could not refresh robot state");
+            }
+
+            return success;
+        }
+
+        private bool RebaseCursorsToCurrentState(bool flushPending)
+        {
+            if (!TryGetCurrentStateSnapshot(out Vector currPos, out Rotation currRot, out Joints currJnts, out ExternalAxes currExtAx))
+            {
+                return false;
+            }
+
+            if (flushPending)
+            {
+                FlushCursorsWhileAlive();
+            }
 
             ApplyCurrentStateToCursor(IssueCursor, currPos, currRot, currJnts, currExtAx);
             ApplyCurrentStateToCursor(ReleaseCursor, currPos, currRot, currJnts, currExtAx);
@@ -441,13 +469,30 @@ namespace Machina
 
             if (MotionCursor != null)
             {
-                MotionCursor.FlushWhileAlive();
+                if (flushPending)
+                {
+                    MotionCursor.FlushWhileAlive();
+                }
                 ApplyCurrentStateToCursor(MotionCursor, currPos, currRot, currJnts, currExtAx);
             }
 
             _areCursorsInitialized = true;
 
-            logger.Info("Applied current robot state and cleared pending actions");
+            return true;
+        }
+
+        private bool TryGetCurrentStateSnapshot(out Vector currPos, out Rotation currRot, out Joints currJnts, out ExternalAxes currExtAx)
+        {
+            currPos = _driver.GetCurrentPosition();
+            currRot = _driver.GetCurrentOrientation();
+            currJnts = _driver.GetCurrentJoints();
+            currExtAx = _driver.GetCurrentExternalAxes();
+
+            if (currPos == null || currRot == null || currJnts == null)
+            {
+                logger.Warning("Driver could not provide a full current state snapshot");
+                return false;
+            }
             return true;
         }
 

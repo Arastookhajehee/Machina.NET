@@ -225,6 +225,11 @@ namespace Machina.Drivers
                 return jnt;
             }
 
+            if (this.parentControl.MotionCursor != null && this.parentControl.MotionCursor.axes != null)
+            {
+                return this.parentControl.MotionCursor.axes;
+            }
+
             return this._tcpManager.initAx;
         }
 
@@ -236,7 +241,12 @@ namespace Machina.Drivers
                 logger.Debug($"GetCurrentOrientation: {ori}");
                 return ori;
             }
-            
+
+            if (this.parentControl.MotionCursor != null && this.parentControl.MotionCursor.rotation != null)
+            {
+                return this.parentControl.MotionCursor.rotation;
+            }
+             
 
             return this._tcpManager.initRot;
         }
@@ -248,6 +258,11 @@ namespace Machina.Drivers
                 var pos = _rsBridge.GetCurrentPosition();
                 logger.Debug($"GetCurrentPosition: {pos}");
                 return pos;
+            }
+
+            if (this.parentControl.MotionCursor != null && this.parentControl.MotionCursor.position != null)
+            {
+                return this.parentControl.MotionCursor.position;
             }
 
             return this._tcpManager.initPos;  // will be null if not initialized...
@@ -264,6 +279,11 @@ namespace Machina.Drivers
             //    logger.Debug($"GetCurrentExternalAxes: {extax}");
             //    return extax;
             //}
+
+            if (this.parentControl.MotionCursor != null && this.parentControl.MotionCursor.externalAxesCartesian != null)
+            {
+                return this.parentControl.MotionCursor.externalAxesCartesian;
+            }
 
             return this._tcpManager.initExtAx;  // will be null if not initialized...
         }

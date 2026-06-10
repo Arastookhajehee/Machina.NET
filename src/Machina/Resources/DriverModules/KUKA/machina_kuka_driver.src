@@ -190,7 +190,17 @@ FOR FI = 1 TO 200 STEP 1
 ;ExternalAxis = 23
 ;CustomCode = 24
 ;ArmAngle = 25
-;SyncCurrent = 26
+;ArcMotion = 26
+;OnrobotRG6 = 27
+;OnrobotSD_shank = 28
+;OnrobotSD_tighten = 29
+;OnRobotSD_loosen = 30
+;OnRobotSD_Premount = 31
+;OnrobotSD_PickScrew = 32
+;OnRobotVG_GripAll = 33
+;OnRobotVG_ChannelGrip = 34
+;OnRobotVG_Release = 35
+;SyncCurrent = 36
 
 ; a switch case block that executes actions according to their types
 SWITCH actions[FI].type
@@ -386,8 +396,24 @@ CASE 25 ;ArmAngle = 25
  axispos.A6 = actions[FI].v7
  PTP axispos C_PTP
 
-CASE 26 ;SyncCurrent = 26
+CASE 36 ;SyncCurrent = 36
  WAIT SEC 0.5
+ current_axispos = $AXIS_ACT_MEAS
+ current_posmove = $POS_ACT_MES
+ RET = eki_setreal("machina_kuka_server", "S/@VR", driver_ver)
+ RET = eki_setreal("machina_kuka_server", "S/@A1", current_axispos.A1)
+ RET = eki_setreal("machina_kuka_server", "S/@A2", current_axispos.A2)
+ RET = eki_setreal("machina_kuka_server", "S/@A3", current_axispos.A3)
+ RET = eki_setreal("machina_kuka_server", "S/@A4", current_axispos.A4)
+ RET = eki_setreal("machina_kuka_server", "S/@A5", current_axispos.A5)
+ RET = eki_setreal("machina_kuka_server", "S/@A6", current_axispos.A6)
+ RET = eki_setreal("machina_kuka_server", "S/@X", current_posmove.X)
+ RET = eki_setreal("machina_kuka_server", "S/@Y", current_posmove.Y)
+ RET = eki_setreal("machina_kuka_server", "S/@Z", current_posmove.Z)
+ RET = eki_setreal("machina_kuka_server", "S/@A", current_posmove.A)
+ RET = eki_setreal("machina_kuka_server", "S/@B", current_posmove.B)
+ RET = eki_setreal("machina_kuka_server", "S/@C", current_posmove.C)
+ RET = eki_send("machina_kuka_server", "S")
 
 DEFAULT
 ; Do Nothing
@@ -441,7 +467,17 @@ DEF machinafeedback( )
 ;ExternalAxis = 23
 ;CustomCode = 24
 ;ArmAngle = 25
-;SyncCurrent = 26
+;ArcMotion = 26
+;OnrobotRG6 = 27
+;OnrobotSD_shank = 28
+;OnrobotSD_tighten = 29
+;OnRobotSD_loosen = 30
+;OnRobotSD_Premount = 31
+;OnrobotSD_PickScrew = 32
+;OnRobotVG_GripAll = 33
+;OnRobotVG_ChannelGrip = 34
+;OnRobotVG_Release = 35
+;SyncCurrent = 36
 IF actions[FI].type > -1 THEN
 
 RET = eki_setint("machina_kuka_server", "R/@ID", actions[FI].id) 
