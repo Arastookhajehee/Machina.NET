@@ -231,6 +231,17 @@ namespace Machina
         {
             released.Clear();
             pending.Clear();
+            blockCounts.Clear();
+        }
+
+        /// <summary>
+        /// Clear all pending Actions while preserving released history.
+        /// Useful when the live robot state is still valid, but queued actions are not.
+        /// </summary>
+        public void FlushWhileAlive()
+        {
+            pending.Clear();
+            blockCounts.Clear();
         }
 
         /// <summary>

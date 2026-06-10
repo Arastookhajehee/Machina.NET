@@ -296,6 +296,16 @@ namespace Machina
         }
 
         /// <summary>
+        /// Clears any pending actions and rebases Machina's internal state to the robot's current state.
+        /// Useful before sending a fresh batch of actions without reconnecting.
+        /// </summary>
+        /// <returns></returns>
+        public bool ApplyByGetCurrent()
+        {
+            return c.ApplyByGetCurrent();
+        }
+
+        /// <summary>
         /// Returns a string representation of the IP of the currently connected robot device.
         /// </summary>
         /// <returns></returns>

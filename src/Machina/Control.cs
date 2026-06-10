@@ -414,6 +414,43 @@ namespace Machina
             return result;
         }
 
+        public bool ApplyByGetCurrent()
+        {
+            if (_driver == null || _controlMode == ControlType.Offline)
+            {
+                logger.Warning("Cannot apply current state without an active connection");
+                return false;
+            }
+
+            Vector currPos = _driver.GetCurrentPosition();
+            Rotation currRot = _driver.GetCurrentOrientation();
+            Joints currJnts = _driver.GetCurrentJoints();
+            ExternalAxes currExtAx = _driver.GetCurrentExternalAxes();
+
+            if (currPos == null || currRot == null || currJnts == null)
+            {
+                logger.Warning("Driver could not provide a full current state snapshot");
+                return false;
+            }
+
+            FlushCursorsWhileAlive();
+
+            ApplyCurrentStateToCursor(IssueCursor, currPos, currRot, currJnts, currExtAx);
+            ApplyCurrentStateToCursor(ReleaseCursor, currPos, currRot, currJnts, currExtAx);
+            ApplyCurrentStateToCursor(ExecutionCursor, currPos, currRot, currJnts, currExtAx);
+
+            if (MotionCursor != null)
+            {
+                MotionCursor.FlushWhileAlive();
+                ApplyCurrentStateToCursor(MotionCursor, currPos, currRot, currJnts, currExtAx);
+            }
+
+            _areCursorsInitialized = true;
+
+            logger.Info("Applied current robot state and cleared pending actions");
+            return true;
+        }
+
         /// <summary>
         /// Is this robot connected to a real/virtual device?
         /// </summary>
@@ -1226,6 +1263,22 @@ namespace Machina
             _motionCursor = new RobotCursor(this, "MotionCursor", false, null);
             //_motionCursor.Initialize();  // No need for this, since this is just a "zombie" cursor, a holder of static properties updated in real-time with no actions applied to it. Any init info is negligible.
             return true;
+        }
+
+        private void FlushCursorsWhileAlive()
+        {
+            IssueCursor.FlushWhileAlive();
+            ReleaseCursor.FlushWhileAlive();
+            ExecutionCursor.FlushWhileAlive();
+        }
+
+        private void ApplyCurrentStateToCursor(RobotCursor cursor, Vector position, Rotation rotation, Joints joints, ExternalAxes extAx)
+        {
+            cursor.UpdateFullPose(
+                position == null ? null : new Vector(position),
+                rotation == null ? null : new Rotation(rotation),
+                joints == null ? null : new Joints(joints),
+                extAx == null ? null : new ExternalAxes(extAx));
         }
 
 

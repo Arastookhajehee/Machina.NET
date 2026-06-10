@@ -363,6 +363,14 @@ namespace Machina
             return actionBuffer.ActionsPendingCount();
         }
 
+        internal void FlushWhileAlive()
+        {
+            lock (actionBufferLock)
+            {
+                actionBuffer.FlushWhileAlive();
+            }
+        }
+
         ///// <summary>
         ///// Return a device-specific program with all the Actions pending in the buffer.
         ///// </summary>
@@ -434,7 +442,8 @@ namespace Machina
             this.position = pos;
             this.rotation = rot;
             this.axes = ax;
-            this.externalAxesCartesian = extax;        
+            this.externalAxesCartesian = extax;
+            this.externalAxesJoints = extax == null ? null : new ExternalAxes(extax);
         }
 
 
