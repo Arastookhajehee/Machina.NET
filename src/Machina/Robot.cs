@@ -300,20 +300,21 @@ namespace Machina
         /// Useful before sending a fresh batch of actions without reconnecting.
         /// </summary>
         /// <returns></returns>
-        public bool ApplyByGetCurrent()
+        public bool ApplyByGetCurrent(bool flushPending = true)
         {
-            return c.ApplyByGetCurrent();
+            return c.ApplyByGetCurrent(flushPending);
         }
 
         /// <summary>
         /// Issues a SyncCurrent action marker through the normal Machina instruction flow.
         /// This is exposed as a string-parseable command for Bridge and other text-based clients.
         /// </summary>
+        /// <param name="flushPending">If true, pending actions are flushed when the sync executes before rebasing Machina's internal state.</param>
         /// <returns></returns>
         [ParseableFromString]
-        public bool SyncCurrent()
+        public bool SyncCurrent(bool flushPending = false)
         {
-            return c.IssueSyncCurrentRequest();
+            return c.IssueSyncCurrentRequest(flushPending);
         }
 
         /// <summary>

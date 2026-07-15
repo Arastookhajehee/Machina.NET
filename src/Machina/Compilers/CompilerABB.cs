@@ -428,7 +428,7 @@ namespace Machina
                     break;
 
                 case ActionType.SyncCurrent:
-                    dec = string.Format("    {0} SyncCurrent()", CC);
+                    dec = string.Format("    {0} {1}", CC, action.ToInstruction().TrimEnd(';'));
                     break;
 
                 case ActionType.DefineTool:

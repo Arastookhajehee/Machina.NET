@@ -414,7 +414,7 @@ namespace Machina
             return result;
         }
 
-        public bool ApplyByGetCurrent()
+        public bool ApplyByGetCurrent(bool flushPending = true)
         {
             if (_driver == null || _controlMode == ControlType.Offline)
             {
@@ -422,12 +422,12 @@ namespace Machina
                 return false;
             }
 
-            if (!RebaseCursorsToCurrentState(true))
+            if (!RebaseCursorsToCurrentState(flushPending))
             {
                 return false;
             }
 
-            logger.Info("Applied current robot state and cleared pending actions");
+            logger.Info($"Applied current robot state{(flushPending ? " and cleared pending actions" : "")}");
             return true;
         }
 
@@ -438,10 +438,11 @@ namespace Machina
                 return true;
             }
 
-            bool success = RebaseCursorsToCurrentState(false);
+            bool flushPending = executedAction is ActionSyncCurrent asc && asc.flushPending;
+            bool success = RebaseCursorsToCurrentState(flushPending);
             if (success)
             {
-                logger.Info("Synced current robot state from device");
+                logger.Info($"Synced current robot state from device{(flushPending ? " and cleared pending actions" : "")}");
             }
             else
             {
@@ -1146,8 +1147,8 @@ namespace Machina
         public bool IssueInitializationRequest(bool initiate) =>
                 IssueApplyActionRequest(new ActionInitialization(initiate));
 
-        public bool IssueSyncCurrentRequest() =>
-                IssueApplyActionRequest(new ActionSyncCurrent());
+        public bool IssueSyncCurrentRequest(bool flushPending = false) =>
+                IssueApplyActionRequest(new ActionSyncCurrent(flushPending));
 
 
         /// <summary>

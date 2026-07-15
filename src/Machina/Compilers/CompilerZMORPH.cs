@@ -301,7 +301,7 @@ namespace Machina
                     break;
 
                 case ActionType.SyncCurrent:
-                    dec = $"{CC} SyncCurrent()";
+                    dec = $"{CC} {action.ToInstruction().TrimEnd(';')}";
                     break;
 
                 case ActionType.CustomCode:
